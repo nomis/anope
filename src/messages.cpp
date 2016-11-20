@@ -344,6 +344,17 @@ void Privmsg::Run(MessageSource &source, const std::vector<Anope::string> &param
 
 		if (bi)
 		{
+			if (!u->HasMode("SSL"))
+			{
+				Log(LOG_DEBUG) << "Ignored PRIVMSG without TLS from " << u->nick;
+
+				Anope::string network_hostname = "irc.imaginarynet.uk";
+				if (u->server->GetName() == "irchost.tardis.ed.ac.uk" || u->server->GetName() == "irc.tard.is")
+					network_hostname = "irc.tard.is";
+				u->SendMessage(bi, _("Communication with services over a plaintext connection is no longer supported. Reconnect to %s:6697 using TLS (and enable verification)."), network_hostname.c_str());
+				return;
+			}
+
 			if (message[0] == '\1' && message[message.length() - 1] == '\1')
 			{
 				if (message.substr(0, 6).equals_ci("\1PING "))
