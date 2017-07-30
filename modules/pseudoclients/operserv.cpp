@@ -248,14 +248,10 @@ class OperServCore : public Module
 
 	void OnUserModeSet(const MessageSource &setter, User *u, const Anope::string &mname) anope_override
 	{
-		if (mname == "OPER")
-			Log(u, "oper", OperServ) << "is now an IRC operator.";
 	}
 
 	void OnUserModeUnset(const MessageSource &setter, User *u, const Anope::string &mname) anope_override
 	{
-		if (mname == "OPER")
-			Log(u, "oper", OperServ) << "is no longer an IRC operator";
 	}
 
 	void OnUserConnect(User *u, bool &exempt) anope_override
