@@ -143,9 +143,9 @@ class PlexusProto : public IRCDProto
 		UplinkSocket::Message(source) << "ENCAP * SVSMODE " << u->GetUID() << " " << u->timestamp << " " << buf;
 	}
 
-	void SendLogin(User *u, NickAlias *na) anope_override
+	void SendLogin(User *u, NickCore *nc) anope_override
 	{
-		UplinkSocket::Message(Me) << "ENCAP * SU " << u->GetUID() << " " << na->nc->display;
+		UplinkSocket::Message(Me) << "ENCAP * SU " << u->GetUID() << " " << nc->display;
 	}
 
 	void SendLogout(User *u) anope_override

@@ -77,7 +77,7 @@ class InspIRCd20Proto : public IRCDProto
 	void SendBOB() anope_override { insp12->SendBOB(); }
 	void SendEOB() anope_override { insp12->SendEOB(); }
 	void SendGlobopsInternal(const MessageSource &source, const Anope::string &buf) { insp12->SendGlobopsInternal(source, buf); }
-	void SendLogin(User *u, NickAlias *na) anope_override { insp12->SendLogin(u, na); }
+	void SendLogin(User *u, NickCore *nc) anope_override { insp12->SendLogin(u, nc); }
 	void SendLogout(User *u) anope_override { insp12->SendLogout(u); }
 	void SendChannel(Channel *c) anope_override { insp12->SendChannel(c); }
 	void SendSASLMessage(const SASL::Message &message) anope_override { insp12->SendSASLMessage(message); }

@@ -362,8 +362,6 @@ void User::Identify(NickAlias *na)
 		na->last_seen = Anope::CurTime;
 	}
 
-	IRCD->SendLogin(this, na);
-
 	this->Login(na->nc);
 
 	FOREACH_MOD(OnNickIdentify, (this));
@@ -393,6 +391,8 @@ void User::Login(NickCore *core)
 	if (!core || core == this->nc)
 		return;
 
+	IRCD->SendLogin(this, core);
+
 	this->Logout();
 	this->nc = core;
 	core->users.push_back(this);
@@ -409,6 +409,8 @@ void User::Logout()
 {
 	if (!this->nc)
 		return;
+
+	IRCD->SendLogout(this);
 
 	Log(this, "account") << "is no longer identified as " << this->nc->display;
 

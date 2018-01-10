@@ -369,7 +369,7 @@ class CommandNSSetDisplay : public Command
 		for (std::list<User *>::iterator it = user_na->nc->users.begin(); it != user_na->nc->users.end(); ++it)
 		{
 			User *u = *it;
-			IRCD->SendLogin(u, user_na);
+			IRCD->SendLogin(u, user_na->nc);
 		}
 
 		source.Reply(NICK_SET_DISPLAY_CHANGED, user_na->nc->display.c_str());

@@ -215,12 +215,12 @@ class HybridProto : public IRCDProto
 		UplinkSocket::Message(source) << "SVSMODE " << u->GetUID() << " " << u->timestamp << " " << buf;
 	}
 
-	void SendLogin(User *u, NickAlias *na) anope_override
+	void SendLogin(User *u, NickCore *nc) anope_override
 	{
 		if (UseSVSAccount == false)
-			IRCD->SendMode(Config->GetClient("NickServ"), u, "+d %s", na->nc->display.c_str());
+			IRCD->SendMode(Config->GetClient("NickServ"), u, "+d %s", nc->display.c_str());
 		else
-			UplinkSocket::Message(Me) << "SVSACCOUNT " << u->GetUID() << " " << u->timestamp << " " << na->nc->display;
+			UplinkSocket::Message(Me) << "SVSACCOUNT " << u->GetUID() << " " << u->timestamp << " " << nc->display;
 	}
 
 	void SendLogout(User *u) anope_override

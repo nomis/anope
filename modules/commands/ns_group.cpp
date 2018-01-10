@@ -55,7 +55,7 @@ class NSGroupRequest : public IdentifyRequest
 
 		if (u != NULL)
 		{
-			IRCD->SendLogin(u, na); // protocol modules prevent this on unconfirmed accounts
+			IRCD->SendLogin(u, na->nc); // protocol modules prevent this on unconfirmed accounts
 			u->Login(target->nc);
 			FOREACH_MOD(OnNickGroup, (u, target));
 		}

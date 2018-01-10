@@ -439,15 +439,15 @@ class InspIRCd3Proto : public IRCDProto
 			UplinkSocket::Message(source) << "SNONOTICE A :" << buf;
 	}
 
-	void SendLogin(User *u, NickAlias *na) anope_override
+	void SendLogin(User *u, NickCore *nc) anope_override
 	{
 		/* InspIRCd uses an account to bypass chmode +R, not umode +r, so we can't send this here */
-		if (na->nc->HasExt("UNCONFIRMED"))
+		if (nc->HasExt("UNCONFIRMED"))
 			return;
 
-		IRCD->SendVhost(u, na->GetVhostIdent(), na->GetVhostHost());
-		UplinkSocket::Message(Me) << "METADATA " << u->GetUID() << " accountid :" << na->nc->GetId();
-		UplinkSocket::Message(Me) << "METADATA " << u->GetUID() << " accountname :" << na->nc->display;
+		//IRCD->SendVhost(u, na->GetVhostIdent(), na->GetVhostHost());
+		UplinkSocket::Message(Me) << "METADATA " << u->GetUID() << " accountid :" << nc->GetId();
+		UplinkSocket::Message(Me) << "METADATA " << u->GetUID() << " accountname :" << nc->display;
 	}
 
 	void SendLogout(User *u) anope_override

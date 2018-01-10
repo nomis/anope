@@ -110,12 +110,12 @@ class RatboxProto : public IRCDProto
 		UplinkSocket::Message(Me) << "UID " << u->nick << " 1 " << u->timestamp << " " << modes << " " << u->GetIdent() << " " << u->host << " 0 " << u->GetUID() << " :" << u->realname;
 	}
 
-	void SendLogin(User *u, NickAlias *na) anope_override
+	void SendLogin(User *u, NickCore *nc) anope_override
 	{
-		if (na->nc->HasExt("UNCONFIRMED"))
+		if (nc->HasExt("UNCONFIRMED"))
 			return;
 
-		UplinkSocket::Message(Me) << "ENCAP * SU " << u->GetUID() << " " << na->nc->display;
+		UplinkSocket::Message(Me) << "ENCAP * SU " << u->GetUID() << " " << nc->display;
 	}
 
 	void SendLogout(User *u) anope_override

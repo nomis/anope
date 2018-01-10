@@ -343,11 +343,11 @@ class UnrealIRCdProto : public IRCDProto
 		return mask.length() >= 4 && mask[0] == '~' && mask[2] == ':';
 	}
 
-	void SendLogin(User *u, NickAlias *na) anope_override
+	void SendLogin(User *u, NickCore *nc) anope_override
 	{
 		/* 3.2.10.4+ treats users logged in with accounts as fully registered, even if -r, so we can not set this here. Just use the timestamp. */
-		if (Servers::Capab.count("ESVID") > 0 && !na->nc->HasExt("UNCONFIRMED"))
-			IRCD->SendMode(Config->GetClient("NickServ"), u, "+d %s", na->nc->display.c_str());
+		if (Servers::Capab.count("ESVID") > 0 && !nc->HasExt("UNCONFIRMED"))
+			IRCD->SendMode(Config->GetClient("NickServ"), u, "+d %s", nc->display.c_str());
 		else
 			IRCD->SendMode(Config->GetClient("NickServ"), u, "+d %d", u->signon);
 	}

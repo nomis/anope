@@ -63,7 +63,7 @@ class CharybdisProto : public IRCDProto
 	void SendChannel(Channel *c) anope_override { ratbox->SendChannel(c); }
 	void SendTopic(const MessageSource &source, Channel *c) anope_override { ratbox->SendTopic(source, c); }
 	bool IsIdentValid(const Anope::string &ident) anope_override { return ratbox->IsIdentValid(ident); }
-	void SendLogin(User *u, NickAlias *na) anope_override { ratbox->SendLogin(u, na); }
+	void SendLogin(User *u, NickCore *nc) anope_override { ratbox->SendLogin(u, nc); }
 	void SendLogout(User *u) anope_override { ratbox->SendLogout(u); }
 
 	void SendSASLMechanisms(std::vector<Anope::string> &mechanisms) anope_override
