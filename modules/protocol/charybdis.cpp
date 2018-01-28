@@ -162,6 +162,23 @@ class CharybdisProto : public IRCDProto
 		Server *s = Server::Find(uid.substr(0, 3));
 		UplinkSocket::Message(Me) << "ENCAP " << (s ? s->GetName() : uid.substr(0, 3)) << " SVSLOGIN " << uid << " * " << (!vident.empty() ? vident : '*') << " " << (!vhost.empty() ? vhost : '*') << " " << acc;
 	}
+
+	bool IsExtbanValid(const Anope::string &mask) anope_override
+	{
+		if (mask.length() >= 2 && mask[0] == '$' && mask[1] != '~') {
+			return true;
+		}
+		if (mask.length() >= 3 && mask[0] == '$' && mask[1] == '~') {
+			return true;
+		}
+		if (mask.length() >= 4 && mask[0] == '$' && mask[2] == ':') {
+			return true;
+		}
+		if (mask.length() >= 5 && mask[0] == '$' && mask[1] == '~' && mask[3] == ':') {
+			return true;
+		}
+		return false;
+	}
 };
 
 
@@ -276,6 +293,39 @@ struct IRCDMessagePass : IRCDMessage
 	}
 };
 
+class CharybdisExtBan : public ChannelModeList
+{
+ public:
+	CharybdisExtBan(const Anope::string &mname, char modeChar) : ChannelModeList(mname, modeChar) { }
+
+	bool Matches(User *u, const Entry *e) anope_override
+	{
+		const Anope::string &mask = e->GetMask();
+
+		if (mask.find("$a:") == 0)
+		{
+			Anope::string real_mask = mask.substr(3);
+
+			if (u->IsIdentified() && Anope::Match(u->Account()->display, real_mask))
+				return true;
+		}
+
+		if (mask == "$a")
+		{
+			if (u->IsIdentified())
+				return true;
+		}
+
+		if (mask.find("$~a:") == 0)
+		{
+			if (!u->IsIdentified())
+				return true;
+		}
+
+		return false;
+	}
+};
+
 class ProtoCharybdis : public Module
 {
 	Module *m_ratbox;
@@ -324,7 +374,10 @@ class ProtoCharybdis : public Module
 		ModeManager::AddUserMode(new UserModeNoone("SSL", 'Z'));
 
 		/* b/e/I */
-		ModeManager::AddChannelMode(new ChannelModeList("QUIET", 'q'));
+		ModeManager::AddChannelMode(new CharybdisExtBan("BAN", 'b'));
+		ModeManager::AddChannelMode(new CharybdisExtBan("EXCEPT", 'e'));
+		ModeManager::AddChannelMode(new CharybdisExtBan("INVITEOVERRIDE", 'I'));
+		ModeManager::AddChannelMode(new CharybdisExtBan("QUIET", 'q'));
 
 		/* Add channel modes */
 		ModeManager::AddChannelMode(new ChannelMode("BLOCKCOLOR", 'c'));

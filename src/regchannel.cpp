@@ -633,20 +633,10 @@ void ChannelInfo::ClearLevels()
 
 Anope::string ChannelInfo::GetIdealBan(User *u) const
 {
-	switch (this->bantype)
-	{
-		case 0:
-			return "*!" + u->GetVIdent() + "@" + u->GetDisplayedHost();
-		case 1:
-			if (u->GetVIdent()[0] == '~')
-				return "*!*" + u->GetVIdent() + "@" + u->GetDisplayedHost();
-			else
-				return "*!" + u->GetVIdent() + "@" + u->GetDisplayedHost();
-		case 3:
-			return "*!" + u->Mask();
-		case 2:
-		default:
-			return "*!*@" + u->GetDisplayedHost();
+	if (u->IsIdentified()) {
+		return "$a:" + u->Account()->display;
+	} else {
+		return u->nick + "!*@*";
 	}
 }
 
